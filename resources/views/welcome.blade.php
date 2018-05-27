@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Moyenne')
+@section('title', 'Moyenne ('.$user->prenom.' '.$user->nom.')')
 
 @section('content')
     <section class="hero is-small is-primary is-bold">

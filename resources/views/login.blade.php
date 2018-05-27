@@ -10,7 +10,7 @@
                     Connexion
                 </h1>
                 <h2 class="subtitle">
-                    Calcul des moyennes ecole directe
+                    Entrez vos identifiants EcoleDirecte
                 </h2>
             </div>
         </div>

@@ -12,12 +12,15 @@
                 <h2 class="subtitle">
                     depuis EcoleDirecte
                 </h2>
-                <a href="{{ url('login/out') }}" class="button is-info">Déconnexion</a>
             </div>
         </div>
     </section>
+    <div class="notification is-warning is-radiusless">
+        Les moyennes affichées sont susceptibles d'être incorrectes pour certains trimestres, résolution du problème en cours.
+    </div>
     <section class="section">
         <div class="container">
+            <a href="{{ url('login/out') }}" class="button is-info is-pulled-right">Déconnexion</a>
             <h1 class="title">Bonjour, {{ $user->prenom.' '.$user->nom.' ('.$user->classe->libelle.')' }}</h1>
             <h2 class="subtitle">Moyenne générale sur l'année : {{ round($moyenne, 2) }}</h2>
             <table class="table is-fullwidth is-hoverable is-striped">

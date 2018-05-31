@@ -50,9 +50,12 @@ class NotesController extends Controller
                     {
                         if($matiere->codeMatiere == $note->codeMatiere AND $periode->idPeriode == $note->codePeriode)
                         {
-                            $matiere->notes[] = $note;
-                            $matiere->totalNotes = $matiere->totalNotes + intval($note->valeur) * $note->coef;
-                            $matiere->totalCoefs = $matiere->totalCoefs + $note->coef;
+                            if(is_int($note->valeur))
+                            {
+                                $matiere->notes[] = $note;
+                                $matiere->totalNotes = $matiere->totalNotes + intval($note->valeur) * $note->coef;
+                                $matiere->totalCoefs = $matiere->totalCoefs + $note->coef;
+                            }
                         }
                     }
 

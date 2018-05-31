@@ -47,7 +47,7 @@
     <script src="{{ url('assets/plugins/popper/popper.min.js') }}"></script>
     <script src="{{ url('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
     @yield('js')
-    <script src="{{ url('assets/js/app.min.js') }}"></script>
+    <script src="{{ url('assets/js/theme.min.js') }}"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114367988-3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];

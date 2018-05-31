@@ -15,9 +15,9 @@
             <div id="accordion" class="accordion" role="tablist">
                 @foreach($periodes as $periode)
                     <div class="card">
-                        <div class="card-header" role="tab" id="headingOne">
+                        <div class="card-header" role="tab" id="h{{ $periode->idPeriode }}">
                             <h5>
-                                <a data-toggle="collapse" href="#collapseOne">
+                                <a class="collapsed" data-toggle="collapse" href="#c{{ $periode->idPeriode }}">
                                     {{ $periode->periode }} (Moyenne : {{ round($periode->moyenne, 2) }})
                                     <div class="float-right">
                                         Trimestre
@@ -30,24 +30,24 @@
                                 </a>
                             </h5>
                         </div>
-                        <div id="collapseOne" class="collapse" role="tabpanel" data-parent="#accordion">
+                        <div id="c{{ $periode->idPeriode }}" class="collapse" role="tabpanel" data-parent="#accordion">
                             <div class="card-body">
                                 <table class="ui celled padded table">
                                     <thead>
-                                    <tr>
-                                        <th class="single line">Matière</th>
-                                        <th>Coef</th>
-                                        <th>Moyenne</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="single line">Matière</th>
+                                            <th>Coef</th>
+                                            <th>Moyenne</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($periode->matieres as $matiere)
-                                        <tr>
-                                            <td>{{ $matiere->discipline }}</td>
-                                            <td>{{ $matiere->coef }}</td>
-                                            <td>{{ round($matiere->moyenne, 2) }}</td>
-                                        </tr>
-                                    @endforeach
+                                        @foreach($periode->matieres as $matiere)
+                                            <tr>
+                                                <td>{{ $matiere->discipline }}</td>
+                                                <td>{{ $matiere->coef }}</td>
+                                                <td>{{ round($matiere->moyenne, 2) }}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -57,12 +57,4 @@
             </div>
         </div>
     </section>
-@endsection
-
-@section('js')
-    <script>
-        $('.ui.accordion')
-            .accordion()
-        ;
-    </script>
 @endsection

@@ -12,7 +12,7 @@ class NotesController extends Controller
     {
         $client = new Client([
             'base_uri' => 'https://vmws14.ecoledirecte.com/v3/',
-            'timeout'  => 50.0,
+            'timeout'  => 5.0,
         ]);
 
         $response = $client->request('POST', 'eleves/'.$request->session()->get('user')->id.'/notes.awp?verbe=get&', [
@@ -21,47 +21,60 @@ class NotesController extends Controller
 
         $response = json_decode($response->getBody());
 
-        $notes = $response->data->notes;
-        $periodes = $response->data->periodes;
-        $matieres = $periodes['0']->ensembleMatieres->disciplines;
-
-        $moyenne = 0;
-        $coefs = 0;
-
-        foreach($matieres as $m)
+        if(empty($response->data->notes))
         {
-            foreach($notes as $n)
-            {
-                if($n->codeMatiere == $m->codeMatiere)
-                {
-                    $m->notes[] = $n;
-                }
-            }
+            $request->session()->flush();
+            $request->session()->regenerate();
 
-            $m->moyenne = 0;
-            $m->coefs = 0;
-
-            foreach($m->notes as $mn)
-            {
-                if($mn->noteSur == 10)
-                {
-                    $mn->valeur = 2 * intval($mn->valeur);
-                }
-                $m->moyenne = $m->moyenne + (intval($mn->valeur)) * intval($mn->coef);
-                $m->coefs = $m->coefs + intval($mn->coef);
-            }
-
-            $m->moyenne = $m->moyenne / $m->coefs;
-
-            $moyenne = $moyenne + $m->moyenne * $m->coef;
-            $coefs = $coefs + $m->coef;
+            return redirect('login');
         }
 
-        $moyenne = $moyenne / $coefs;
+        $notes = $response->data->notes;
+        $periodes = $response->data->periodes;
+
+        foreach($periodes as $key => $periode)
+        {
+            if($periode->idPeriode == 'A001' or $periode->idPeriode == 'A002' or $periode->idPeriode == 'A003')
+            {
+                $periode->matieres = [];
+                $periode->totalMoyennes = 0;
+                $periode->totalCoefs = 0;
+
+                foreach($periode->ensembleMatieres->disciplines as $matiere)
+                {
+                    $matiere->notes = [];
+                    $matiere->totalNotes = 0;
+                    $matiere->totalCoefs = 0;
+
+                    foreach($notes as $note)
+                    {
+                        if($matiere->codeMatiere == $note->codeMatiere AND $periode->idPeriode == $note->codePeriode)
+                        {
+                            $matiere->notes[] = $note;
+                            $matiere->totalNotes = $matiere->totalNotes + intval($note->valeur) * $note->coef;
+                            $matiere->totalCoefs = $matiere->totalCoefs + $note->coef;
+                        }
+                    }
+
+                    if(count($matiere->notes) > 0)
+                    {
+                        $matiere->moyenne = $matiere->totalNotes / $matiere->totalCoefs;
+                        $periode->matieres[] = $matiere;
+                        $periode->totalMoyennes = $periode->totalMoyennes + $matiere->moyenne * $matiere->coef;
+                        $periode->totalCoefs = $periode->totalCoefs + $matiere->coef;
+                    }
+                }
+
+                $periode->moyenne = $periode->totalMoyennes / $periode->totalCoefs;
+            }
+            else
+            {
+                unset($periodes[$key]);
+            }
+        }
 
         return view('welcome')
             ->with('user', $request->session()->get('user'))
-            ->with('matieres', $matieres)
-            ->with('moyenne', $moyenne);
+            ->with('periodes', $periodes);
     }
 }

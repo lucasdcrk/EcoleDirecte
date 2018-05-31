@@ -3,44 +3,66 @@
 @section('title', 'Moyenne ('.$user->prenom.' '.$user->nom.')')
 
 @section('content')
-    <section class="hero is-small is-primary is-bold">
-        <div class="hero-body">
-            <div class="container">
-                <h1 class="title">
-                    Calcul des moyennes
-                </h1>
-                <h2 class="subtitle">
-                    depuis EcoleDirecte
-                </h2>
+    <section class="bg-primary">
+        <div class="container">
+            <a class="btn btn-outline-default float-right" href="{{ url('login/out') }}">Déconnexion</a>
+            <h3 class="text-white font-weight-300 m-b-0">Bonjour, {{ $user->prenom.' '.$user->nom.' ('.$user->classe->libelle.')' }}</h3>
+        </div>
+    </section>
+
+    <section class="m-y-30">
+        <div class="container">
+            <div id="accordion" class="accordion" role="tablist">
+                @foreach($periodes as $periode)
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingOne">
+                            <h5>
+                                <a data-toggle="collapse" href="#collapseOne">
+                                    {{ $periode->periode }} (Moyenne : {{ round($periode->moyenne, 2) }})
+                                    <div class="float-right">
+                                        Trimestre
+                                        @if($periode->cloture)
+                                            cloturé &nbsp; <i class="fa fa-lock"></i>
+                                        @else
+                                            ouvert &nbsp; <i class="fa fa-unlock"></i>
+                                        @endif
+                                    </div>
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse" role="tabpanel" data-parent="#accordion">
+                            <div class="card-body">
+                                <table class="ui celled padded table">
+                                    <thead>
+                                    <tr>
+                                        <th class="single line">Matière</th>
+                                        <th>Coef</th>
+                                        <th>Moyenne</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($periode->matieres as $matiere)
+                                        <tr>
+                                            <td>{{ $matiere->discipline }}</td>
+                                            <td>{{ $matiere->coef }}</td>
+                                            <td>{{ round($matiere->moyenne, 2) }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
-    <div class="notification is-warning is-radiusless">
-        Les moyennes affichées sont susceptibles d'être incorrectes pour certains trimestres, résolution du problème en cours.
-    </div>
-    <section class="section">
-        <div class="container">
-            <a href="{{ url('login/out') }}" class="button is-info is-pulled-right">Déconnexion</a>
-            <h1 class="title">Bonjour, {{ $user->prenom.' '.$user->nom.' ('.$user->classe->libelle.')' }}</h1>
-            <h2 class="subtitle">Moyenne générale sur l'année : {{ round($moyenne, 2) }}</h2>
-            <table class="table is-fullwidth is-hoverable is-striped">
-                <thead>
-                    <tr>
-                        <th>Matière</th>
-                        <th>Coef</th>
-                        <th>Moyenne sur l'année</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($matieres as $m)
-                    <tr>
-                        <th>{{ $m->discipline }}</th>
-                        <th>{{ $m->coef }}</th>
-                        <th>{{ round($m->moyenne, 2) }}</th>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </section>
+@endsection
+
+@section('js')
+    <script>
+        $('.ui.accordion')
+            .accordion()
+        ;
+    </script>
 @endsection

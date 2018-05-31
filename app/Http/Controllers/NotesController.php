@@ -32,7 +32,7 @@ class NotesController extends Controller
         $notes = $response->data->notes;
         $periodes = $response->data->periodes;
 
-        foreach($periodes as $key => $periode)
+        foreach($periodes as $pkey => $periode)
         {
             if($periode->idPeriode == 'A001' or $periode->idPeriode == 'A002' or $periode->idPeriode == 'A003')
             {
@@ -40,7 +40,7 @@ class NotesController extends Controller
                 $periode->totalMoyennes = 0;
                 $periode->totalCoefs = 0;
 
-                foreach($periode->ensembleMatieres->disciplines as $matiere)
+                foreach($periode->ensembleMatieres->disciplines as $mkey => $matiere)
                 {
                     $matiere->notes = [];
                     $matiere->totalNotes = 0;
@@ -50,7 +50,7 @@ class NotesController extends Controller
                     {
                         if($matiere->codeMatiere == $note->codeMatiere AND $periode->idPeriode == $note->codePeriode)
                         {
-                            if(is_int($note->valeur))
+                            if(is_numeric($note->valeur))
                             {
                                 $matiere->notes[] = $note;
                                 $matiere->totalNotes = $matiere->totalNotes + intval($note->valeur) * $note->coef;
@@ -72,7 +72,7 @@ class NotesController extends Controller
             }
             else
             {
-                unset($periodes[$key]);
+                unset($periodes[$pkey]);
             }
         }
 

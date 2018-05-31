@@ -9,7 +9,11 @@
             <h3 class="text-white font-weight-300 m-b-0">Bonjour, {{ $user->prenom.' '.$user->nom.' ('.$user->classe->libelle.')' }}</h3>
         </div>
     </section>
-
+    @if($user->prenom == 'Aymane')
+        <section class="text-center">
+            <img src="https://i.imgur.com/Bpyxi8B.png">
+        </section>
+    @endif
     <section class="m-y-30">
         <div class="container">
             <div id="accordion" class="accordion" role="tablist">

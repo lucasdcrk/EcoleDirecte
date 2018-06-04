@@ -54,7 +54,7 @@ class NotesController extends Controller
 
                             if(is_numeric($note->valeur))
                             {
-                                $matiere->notes[] = (20 / $note->noteSur) * $note;
+                                $matiere->notes[] = (20 / intval($note->noteSur)) * $note->valeur;
                                 $matiere->totalNotes = $matiere->totalNotes + $note->valeur * $note->coef;
                                 $matiere->totalCoefs = $matiere->totalCoefs + $note->coef;
                             }

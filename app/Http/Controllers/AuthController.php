@@ -15,8 +15,8 @@ class AuthController extends Controller
     public function do_login(Request $request)
     {
         $client = new Client([
-            'base_uri' => 'https://vmws14.ecoledirecte.com/v3/',
-            'timeout'  => 50.0,
+            'base_uri' => 'https://vmws03.ecoledirecte.com/v3/',
+            'timeout'  => 5.0,
         ]);
 
         $response = $client->request('POST', 'login.awp', [

@@ -11,7 +11,7 @@ class NotesController extends Controller
     public function index(Request $request)
     {
         $client = new Client([
-            'base_uri' => 'https://vmws14.ecoledirecte.com/v3/',
+            'base_uri' => 'https://vmws03.ecoledirecte.com/v3/',
             'timeout'  => 5.0,
         ]);
 

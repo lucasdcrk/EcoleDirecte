@@ -40,16 +40,24 @@
                                     <thead>
                                         <tr>
                                             <th class="single line">Matière</th>
+                                            <th>Notes /20</th>
                                             <th>Coef</th>
-                                            <th>Moyenne</th>
+                                            <th>Moyenne /20</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($periode->matieres as $matiere)
                                             <tr>
                                                 <td>{{ $matiere->discipline }}</td>
+                                                <td>
+                                                    @foreach($matiere->notes as $note)
+                                                        <span class="badge badge-outline-dark" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ $note->devoir }} (Coef {{ $note->coef }})">
+                                                            {{ $note->valeur }} <sup>{{ $note->coef }}</sup>
+                                                        </span>
+                                                    @endforeach
+                                                </td>
                                                 <td>{{ $matiere->coef }}</td>
-                                                <td>{{ round($matiere->moyenne, 2) }}</td>
+                                                <td class="font-weight-bold">{{ number_format($matiere->moyenne, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
